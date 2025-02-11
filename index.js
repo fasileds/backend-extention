@@ -10,9 +10,14 @@ dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
-
+app.use(
+  cors({
+    origin: "*", // Replace "*" with specific domains for better security
+    methods: "GET,POST,OPTIONS",
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use(bodyParser.json());
-app.use(cors({ origin: "*" }));
 
 app.get("/", (req, res) => {
   res.send("Welcome to my simple Node.js app!");
