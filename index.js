@@ -1,7 +1,8 @@
-import express from "express";
-import bodyParser from "body-parser";
-import Stripe from "stripe";
-import cors from "cors";
+const express = require("express");
+const bodyParser = require("body-parser");
+const Stripe = require("stripe");
+const cors = require("cors");
+
 const stripe = new Stripe(
   "sk_test_51Q8bc2IXfR0igwVwqY5ZY2qTmZhIPNzXOalkGqk0bNYZem4Wh64Ba1qm0F0wMaEdX96H316EwA3WQZVhYk78LPrV00FP61gPJO"
 );
@@ -9,9 +10,11 @@ const stripe = new Stripe(
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({ origin: "*" }));
+
 app.get("/", (req, res) => {
   res.end("Welcome to my simple Node.js app!");
 });
+
 app.post("/create-checkout-session", async (req, res) => {
   const { priceId } = req.body;
 
@@ -53,4 +56,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-export default app;
+module.exports = app;
