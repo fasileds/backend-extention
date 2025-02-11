@@ -2,17 +2,20 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const Stripe = require("stripe");
 const cors = require("cors");
+const dotenv = require("dotenv");
 
-const stripe = new Stripe(
-  "sk_test_51Q8bc2IXfR0igwVwqY5ZY2qTmZhIPNzXOalkGqk0bNYZem4Wh64Ba1qm0F0wMaEdX96H316EwA3WQZVhYk78LPrV00FP61gPJO"
-);
+// Load environment variables from .env file
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
+
 app.use(bodyParser.json());
 app.use(cors({ origin: "*" }));
 
 app.get("/", (req, res) => {
-  res.end("Welcome to my simple Node.js app!");
+  res.send("Welcome to my simple Node.js app!");
 });
 
 app.post("/create-checkout-session", async (req, res) => {
@@ -45,7 +48,7 @@ app.post("/unsubscribe", async (req, res) => {
   try {
     const deletedSubscription = await stripe.subscriptions.del(subscriptionId);
     res.json({ status: deletedSubscription.status });
-    console.log("subscription deleted", deletedSubscription);
+    console.log("Subscription deleted", deletedSubscription);
   } catch (error) {
     console.error("Error cancelling subscription:", error.message);
     res.status(500).json({ error: error.message });
@@ -56,4 +59,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 module.exports = app;
