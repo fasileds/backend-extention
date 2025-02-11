@@ -8,7 +8,7 @@ const stripe = new Stripe(
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 app.post("/create-checkout-session", async (req, res) => {
   const { priceId } = req.body;
